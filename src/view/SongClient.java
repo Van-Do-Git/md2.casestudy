@@ -11,8 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SongClient {
-    public static void main(String[] args) {
-        SongManager songManager = SongManager.getInstance();
+    public static SongManager songManager = SongManager.getInstance();
+
+    public static void managerSong() {
         String chose;
         String regexChose = "^[1-5]+$";
         Scanner scanner = new Scanner(System.in);
@@ -26,6 +27,29 @@ public class SongClient {
             System.out.println("5: to exit");
             chose = scanner.nextLine();
             checkout = validate(chose, regexChose) && chose.equals("5");
+            switch (chose) {
+                case "1":
+                    if (addNewSong()) {
+                        System.out.println("add sucessful");
+                    } else
+                        System.out.println("the song is exist");
+                    break;
+                case "2":
+                    if (editSong()) {
+                        System.out.println("edit sucessful");
+                    } else
+                        System.out.println("is duplicate");
+                    break;
+                case "3":
+                    if (deleteSong()) {
+                        System.out.println("delete sucessful");
+                    } else
+                        System.out.println("not found");
+                    break;
+                case "4":
+                    showAllSong();
+                    break;
+            }
         } while (!checkout);
     }
 
@@ -63,10 +87,54 @@ public class SongClient {
                     break;
             }
         } while (!validate(chose, regexChose));
-        System.out.println("input name song");
-        nameSong = scanner.nextLine();
-        System.out.println("input ");
-        author = scanner.nextLine();
+        String regexData = "\\b.*$";
+        boolean checkdata;
+        do {
+            System.out.println("input name song");
+            nameSong = scanner.nextLine();
+            System.out.println("input author");
+            author = scanner.nextLine();
+            checkdata = validate(nameSong, regexData) && validate(author, regexData);
+        } while (!checkdata);
+
         return song.withNameSong(nameSong).withAuthor(author);
     }
+
+    public static boolean addNewSong() {
+        Song newSong = creatSong();
+        return songManager.addSong(newSong);
+    }
+
+    public static boolean editSong() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("input name song are you want to edit");
+        String nameOfOldSong = scanner.nextLine();
+        System.out.println("input info of song to edit");
+        Song newSong = creatSong();
+        int index = songManager.search(nameOfOldSong);
+        return songManager.edit(index, newSong);
+    }
+
+    public static boolean deleteSong() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("input name song are you want to delete");
+        String nameOfOldSong = scanner.nextLine();
+        int index = songManager.search(nameOfOldSong);
+        return songManager.delete(index);
+    }
+
+    public static Song returSongInList(String name) {
+        int index = songManager.search(name);
+        if (index != -1) {
+            return songManager.getSongList().get(index);
+        } else
+            return null;
+    }
+
+    public static void showAllSong() {
+        for (Song song : songManager.getSongList()) {
+            System.out.println(song);
+        }
+    }
 }
+

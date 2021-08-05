@@ -10,4 +10,5 @@ public interface Obsever {
     boolean aadAccount(AlbumManager albumManager);
 
     boolean checkInstance(AlbumManager albumManager);
+    boolean checkNameAccountIsIntance(String name);
 }

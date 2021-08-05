@@ -12,6 +12,7 @@ public class AccountManager implements Obsever {
     public static final String accPath = "src/storage/account.txt";
     public static final IFileManager<AlbumManager> fileManager = FileManager.getIntance();
     private List<AlbumManager> listAccount;
+
     private AccountManager() {
     }
 
@@ -21,6 +22,14 @@ public class AccountManager implements Obsever {
             insntance.listAccount = fileManager.readFile(accPath);
         }
         return insntance;
+    }
+
+    public List<AlbumManager> getListAccount() {
+        return listAccount;
+    }
+
+    public void setListAccount(List<AlbumManager> listAccount) {
+        this.listAccount = listAccount;
     }
 
     @Override
@@ -42,7 +51,7 @@ public class AccountManager implements Obsever {
 
     @Override
     public boolean aadAccount(AlbumManager albumManager) {
-        if(!checkInstance(albumManager)){
+        if (!checkInstance(albumManager)) {
             listAccount.add(albumManager);
             fileManager.writeFile(listAccount, accPath);
             return true;
@@ -53,5 +62,15 @@ public class AccountManager implements Obsever {
     @Override
     public boolean checkInstance(AlbumManager albumManager) {
         return listAccount.contains(albumManager);
+    }
+
+    @Override
+    public boolean checkNameAccountIsIntance(String name) {
+        for (int i = 0; i < listAccount.size(); i++) {
+            if (name.equals(listAccount.get(i).getAccount().getUser())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

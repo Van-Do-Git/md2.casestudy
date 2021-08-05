@@ -4,26 +4,21 @@ import model.Account;
 import model.Album;
 import model.Song;
 
+import java.io.Serializable;
 import java.util.*;
 
 
-public class AlbumManager {
+public class AlbumManager implements Serializable {
     private Obsever obsever = AccountManager.getInsntance();
-    private String nameManager;
     private List<Album> albumList = new ArrayList<>();
     private Account account;
 
-    public AlbumManager(String nameManager, Account account) {
-        this.nameManager = nameManager;
+    public AlbumManager() {
+
+    }
+
+    public AlbumManager(Account account) {
         this.account = account;
-    }
-
-    public String getNameManager() {
-        return nameManager;
-    }
-
-    public void setNameManager(String nameManager) {
-        this.nameManager = nameManager;
     }
 
     public List<Album> getAlbumList() {
@@ -38,12 +33,21 @@ public class AlbumManager {
         return account;
     }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
     public void addAlbum(Album album) {
         albumList.add(album);
     }
 
-    public void editAlbum(Album album) {
-        albumList.add(album);
+    public void editAlbum(String name, Album album) {
+        int index = searchByNameAlbum(name);
+        if (index != -1) {
+            albumList.remove(index);
+            albumList.add(album);
+        }
+
     }
 
     public void deleteAlbum(int index) {
@@ -86,9 +90,13 @@ public class AlbumManager {
     }
 
 
-    public void saveInfor() {
+    public boolean saveInfor() {
         int index = obsever.searchByAccount(this.account);
-        obsever.updateAccount(index, this);
+        if (this.account == null || index == -1) {
+            return false;
+        } else
+            obsever.updateAccount(index, this);
+        return true;
     }
 
     @Override

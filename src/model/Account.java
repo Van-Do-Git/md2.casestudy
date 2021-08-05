@@ -1,6 +1,8 @@
 package model;
 
-public class Account {
+import java.io.Serializable;
+
+public class Account implements Serializable {
     private String user;
     private String pass;
 
@@ -37,7 +39,7 @@ public class Account {
     public boolean equals(Object obj) {
         if (obj instanceof Account) {
             Account anotherAcc = (Account) obj;
-            if (this.user.equals(anotherAcc.user))
+            if (this.user.equals(anotherAcc.user)&&this.pass.equals(anotherAcc.pass))
                 return true;
         }
         return false;
