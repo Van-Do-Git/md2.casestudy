@@ -5,13 +5,13 @@ import model.FactorySong;
 import model.KindOfSong;
 import model.Song;
 
-import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SongClient {
     public static SongManager songManager = SongManager.getInstance();
+    public static Validate validate = Validate.getInstance();
 
     public static void managerSong() {
         String chose;
@@ -26,7 +26,7 @@ public class SongClient {
             System.out.println("4: to showAll song");
             System.out.println("5: to exit");
             chose = scanner.nextLine();
-            checkout = validate(chose, regexChose) && chose.equals("5");
+            checkout = validate.validate(chose, regexChose) && chose.equals("5");
             switch (chose) {
                 case "1":
                     if (addNewSong()) {
@@ -49,14 +49,11 @@ public class SongClient {
                 case "4":
                     showAllSong();
                     break;
+                case "5":
+                    System.out.println("See you again!");
+                    break;
             }
         } while (!checkout);
-    }
-
-    public static boolean validate(String string, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
     }
 
     public static Song creatSong() {
@@ -86,7 +83,7 @@ public class SongClient {
                 default:
                     break;
             }
-        } while (!validate(chose, regexChose));
+        } while (!validate.validate(chose, regexChose));
         String regexData = "\\b.*$";
         boolean checkdata;
         do {
@@ -94,7 +91,7 @@ public class SongClient {
             nameSong = scanner.nextLine();
             System.out.println("input author");
             author = scanner.nextLine();
-            checkdata = validate(nameSong, regexData) && validate(author, regexData);
+            checkdata = validate.validate(nameSong, regexData) && validate.validate(author, regexData);
         } while (!checkdata);
 
         return song.withNameSong(nameSong).withAuthor(author);

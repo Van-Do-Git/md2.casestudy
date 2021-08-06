@@ -51,12 +51,11 @@ public class Album implements Serializable {
     }
 
     public boolean delete(int index) {
-        try {
+        if (index != -1) {
             listSong.remove(index);
             return true;
-        } catch (Exception e) {
+        } else
             return false;
-        }
     }
 
     public int searchByNameSong(String name) {
@@ -71,5 +70,12 @@ public class Album implements Serializable {
         for (Song song : listSong) {
             System.out.println(song);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Album{" +
+                "nameAlbum='" + nameAlbum + '\'' +
+                '}';
     }
 }
