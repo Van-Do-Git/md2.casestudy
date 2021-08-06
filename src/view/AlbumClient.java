@@ -12,7 +12,7 @@ public class AlbumClient {
 
     public static void manager(AlbumManager albumManager) {
         String chose;
-        String regexChose = "^[0-9]+$";
+        String regexChose = "^[0-9]{1,2}$";
         Scanner scanner = new Scanner(System.in);
         boolean checkout;
         do {
@@ -27,9 +27,10 @@ public class AlbumClient {
             System.out.println("8: to showAll Album");
             System.out.println("9: to save Data");
             System.out.println("10: to entry SongClient");
+            System.out.println("11: to showAll song of a Album");
             System.out.println("0: to logout");
             chose = scanner.nextLine();
-            checkout = validate.validate(chose, regexChose) && chose.equals("0");
+            checkout = validate.validate(chose, regexChose) && chose.equals("11");
             switch (chose) {
                 case "1":
                     addAlbum(albumManager);
@@ -62,10 +63,26 @@ public class AlbumClient {
                 case "10":
                     SongClient.managerSong();
                     break;
+                case "11":
+                    showAllSongOfAlbum(albumManager);
                 case "0":
                     break;
             }
         } while (!checkout);
+    }
+
+    private static void showAllSongOfAlbum(AlbumManager albumManager) {
+        albumManager.showAllAlbum();
+        Scanner scanner = new Scanner(System.in);
+        String nameAlbum;
+        System.out.println("input name of Album to delete a Song");
+        nameAlbum = scanner.nextLine();
+        int indexAlbum = albumManager.searchByNameAlbum(nameAlbum);
+        if (indexAlbum == -1) {
+            System.out.println("wrong name of Album!");
+        } else {
+            albumManager.getAlbumList().get(indexAlbum).showAllSong();
+        }
     }
 
     public static Album creatNewAlbum(AlbumManager albumManager) {
@@ -99,14 +116,13 @@ public class AlbumClient {
         int index = albumManager.searchByNameAlbum(nameAlbum);
         if (index == -1) {
             System.out.println("not fond");
-            return;
         } else {
             do {
                 System.out.println("Input new name");
                 newName = scanner.nextLine();
                 checkData = validate.validate(newName, regexNewName) && !newName.equals(nameAlbum);
                 if (!checkData) {
-                    System.out.println("String is emty  duplicate old name");
+                    System.out.println("String is emty or duplicate old name");
                     System.out.println("Try again");
                 }
             } while (!checkData);
@@ -129,9 +145,9 @@ public class AlbumClient {
                 System.out.println("input 1 to confirm delete");
                 System.out.println("input 2 to skip");
                 chose = scanner.nextLine();
-                checkData = chose == "1" || chose == "2";
+                checkData = chose.equals("1") || chose.equals("2");
             } while (!checkData);
-            if (chose == "1") {
+            if (chose.equals("1")) {
                 albumManager.deleteAlbum(index);
                 albumManager.showAllAlbum();
             }
