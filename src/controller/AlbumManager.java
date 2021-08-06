@@ -64,8 +64,8 @@ public class AlbumManager implements Serializable {
     }
 
 
-    public boolean deleteSong(int indexsong, Album album) {
-        return album.delete(indexsong);
+    public boolean deleteSong(int indexSong, int indexAlbum) {
+        return albumList.get(indexAlbum).delete(indexSong);
     }
 
     public boolean addSong(Song song, String nameAlbum) {
@@ -86,7 +86,7 @@ public class AlbumManager implements Serializable {
 
     public void showAllAlbum() {
         for (Album album : albumList) {
-            System.out.println(album);
+            System.out.print(album+";\t");
         }
     }
 

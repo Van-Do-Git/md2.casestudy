@@ -25,9 +25,9 @@ public class AlbumClient {
             System.out.println("6: to add a Song on Album");
             System.out.println("7: to search song by name");
             System.out.println("8: to showAll Album");
-            System.out.println("9: to save infor");
+            System.out.println("9: to save");
             System.out.println("10: to entry SongClient");
-            System.out.println("0: to exit");
+            System.out.println("0: to logout");
             chose = scanner.nextLine();
             checkout = validate.validate(chose, regexChose) && chose.equals("0");
             switch (chose) {
@@ -68,7 +68,7 @@ public class AlbumClient {
             int indexAlbum = albumManager.searchByNameAlbum(nameAlbum);//kiểm tra xem tên album đã tồn tại chưa?
             checkData = validate.validate(nameAlbum, regexNameAlbum) && indexAlbum == -1;
             if (!checkData)
-                System.out.println("try again");
+                System.out.println("Album name be duplicate. Try again");
         } while (!checkData);
         return new Album(nameAlbum);
     }
@@ -132,5 +132,42 @@ public class AlbumClient {
         System.out.println("Input name album to search");
         String nameAlbum = scanner.nextLine();
         return albumManager.searchByNameAlbum(nameAlbum);
+    }
+
+    public static void deleteSongOfAlbum(AlbumManager albumManager) {
+        albumManager.showAllAlbum();
+        Scanner scanner = new Scanner(System.in);
+        String nameAlbum;
+        String nameSong;
+        int indexAlbum;
+        int indexSong;
+        System.out.println("input name of Album to delete a Song");
+        nameAlbum = scanner.nextLine();
+        indexAlbum = albumManager.searchByNameAlbum(nameAlbum);
+        if (indexAlbum == -1) {
+            System.out.println("Not found this Album");
+        } else {
+            albumManager.getAlbumList().get(indexAlbum).showAllSong();
+            System.out.println("input name of Song to delete");
+            nameSong = scanner.nextLine();
+            indexSong = albumManager.getAlbumList().get(indexAlbum).searchByNameSong(nameSong);
+            if (indexSong == -1) {
+                System.out.println("Not found this Song");
+            } else {
+                String confirm;
+                boolean checkData;
+                do {
+                    System.out.println("Are you sure to delete?");
+                    System.out.println("input yes to delete");
+                    System.out.println("input no to skip");
+                    confirm = scanner.nextLine();
+                    checkData = confirm.equals("yes")||confirm.equals("no");
+                }while (!checkData);
+                if(confirm.equals("yes")){
+                    albumManager.deleteSong(indexSong, indexAlbum);
+                    System.out.println("Delete sucessful");
+                }
+            }
+        }
     }
 }

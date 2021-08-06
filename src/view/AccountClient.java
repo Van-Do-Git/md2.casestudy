@@ -11,8 +11,8 @@ import java.util.regex.Pattern;
 
 public class AccountClient {
     public static AccountManager accountManager = AccountManager.getInsntance();
-    public static SongClient songClient = new SongClient();
     public static AlbumClient albumClient = new AlbumClient();
+    public static Validate validate = Validate.getInstance();
 
     public static void main(String[] args) {
         String choseLogin;
@@ -25,7 +25,7 @@ public class AccountClient {
             System.out.println("2: to signin");
             System.out.println("3: to exit");
             choseLogin = scannerLogin.nextLine();
-            checkoutLogin = validate(choseLogin, regexChoseLogin) && choseLogin.equals("3");
+            checkoutLogin = validate.validate(choseLogin, regexChoseLogin) && choseLogin.equals("3");
             switch (choseLogin) {
                 case "1":
                     if (login() == -1) {
@@ -76,7 +76,7 @@ public class AccountClient {
             user = scanner.nextLine();
             System.out.println("input pass(số 8 - 12 ký tự số viết liền)");
             pass = scanner.nextLine();
-            checkData = validate(user, regexUser) && validate(pass, regexPass);
+            checkData = validate.validate(user, regexUser) && validate.validate(pass, regexPass);
         } while (!checkData);
         Account account = new Account().withUser(user).withUser(pass);
         boolean isIntance = accountManager.checkNameAccountIsIntance(user);//kiểm tra xem tài khoản có bị trùng tên ko?
@@ -89,9 +89,4 @@ public class AccountClient {
         }
     }
 
-    public static boolean validate(String string, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(string);
-        return matcher.matches();
-    }
 }

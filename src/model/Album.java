@@ -68,7 +68,7 @@ public class Album implements Serializable {
 
     public void showAllSong() {
         for (Song song : listSong) {
-            System.out.println(song);
+            System.out.print(song+";\t");
         }
     }
 
