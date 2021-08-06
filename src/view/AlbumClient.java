@@ -57,6 +57,7 @@ public class AlbumClient {
                     break;
                 case "9":
                     saveData(albumManager);
+                    System.out.println("Save data sucessful");
                     break;
                 case "10":
                     SongClient.managerSong();

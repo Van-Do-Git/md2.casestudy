@@ -25,13 +25,14 @@ public class AccountClient {
             checkoutLogin = validate.validate(choseLogin, regexChoseLogin) && choseLogin.equals("3");
             switch (choseLogin) {
                 case "1":
-                    if (login() == -1) {
+                    int index = login();
+                    if (index == -1) {
                         System.out.println("User or pass is not true");
-                        break;
                     } else {
-                        AlbumManager albumManager = accountManager.getListAccount().get(login());
+                        AlbumManager albumManager = accountManager.getListAccount().get(index);
                         AlbumClient.manager(albumManager);
                     }
+                    break;
                 case "2":
                     if (singin()) {
                         System.out.println("singin sucessful,chose 1 to login and then manager your Album");
@@ -68,9 +69,9 @@ public class AccountClient {
     }
 
     private static boolean singin() {
+        Scanner scanner = new Scanner(System.in);
         String user;
         String pass;
-        Scanner scanner = new Scanner(System.in);
         String regexUser = "^[^\\s]{8,12}$";
         String regexPass = "^[0-9]{8,12}$";
         boolean checkData;
@@ -81,7 +82,7 @@ public class AccountClient {
             pass = scanner.nextLine();
             checkData = validate.validate(user, regexUser) && validate.validate(pass, regexPass);
         } while (!checkData);
-        Account account = new Account().withUser(user).withUser(pass);
+        Account account = new Account().withUser(user).withPass(pass);
         boolean isIntance = accountManager.checkNameAccountIsIntance(user);//kiểm tra xem tài khoản có bị trùng tên ko?
         if (!isIntance) {
             AlbumManager albumManager = new AlbumManager(account);

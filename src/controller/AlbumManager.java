@@ -56,7 +56,7 @@ public class AlbumManager implements Serializable {
 
     public int searchByNameAlbum(String name) {
         for (int i = 0; i < albumList.size(); i++) {
-            if (albumList.get(i).equals(name)) {
+            if (albumList.get(i).getNameAlbum().equals(name)) {
                 return i;
             }
         }
