@@ -2,16 +2,13 @@ package view;
 
 import controller.AccountManager;
 import controller.AlbumManager;
-import controller.SongManager;
 import model.Account;
 
+import java.util.List;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class AccountClient {
     public static AccountManager accountManager = AccountManager.getInsntance();
-    public static AlbumClient albumClient = new AlbumClient();
     public static Validate validate = Validate.getInstance();
 
     public static void main(String[] args) {
@@ -33,9 +30,8 @@ public class AccountClient {
                         break;
                     } else {
                         AlbumManager albumManager = accountManager.getListAccount().get(login());
-                        albumClient.manager(albumManager);
+                        AlbumClient.manager(albumManager);
                     }
-
                 case "2":
                     if (singin()) {
                         System.out.println("singin sucessful,chose 1 to login and then manager your Album");
@@ -52,6 +48,7 @@ public class AccountClient {
     }
 
     private static int login() {
+        accountManager = AccountManager.getInsntance();
         String user;
         String pass;
         Scanner scanner = new Scanner(System.in);
@@ -59,9 +56,15 @@ public class AccountClient {
         user = scanner.nextLine();
         System.out.println("input pass");
         pass = scanner.nextLine();
-        Account account = new Account().withUser(user).withUser(pass);
-        int indexAccount = accountManager.searchByAccount(account);
-        return indexAccount;
+        List<AlbumManager> accountList = accountManager.getListAccount();
+        for (int i = 0; i < accountList.size(); i++) {
+            boolean checkUser = accountList.get(i).getAccount().getUser().equals(user);
+            boolean checkPass = accountList.get(i).getAccount().getPass().equals(pass);
+            if (checkUser && checkPass) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     private static boolean singin() {
@@ -83,10 +86,10 @@ public class AccountClient {
         if (!isIntance) {
             AlbumManager albumManager = new AlbumManager(account);
             accountManager.aadAccount(albumManager);
+            accountManager = AccountManager.getInsntance();
             return true;
         } else {
             return false;
         }
     }
-
 }

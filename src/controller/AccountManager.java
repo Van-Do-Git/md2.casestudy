@@ -5,9 +5,10 @@ import model.Account;
 import storage.FileManager;
 import storage.IFileManager;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AccountManager implements Obsever {
+public class AccountManager implements Obsever, Serializable {
     private static AccountManager insntance;
     public static final String accPath = "src/storage/account.txt";
     public static final IFileManager<AlbumManager> fileManager = FileManager.getIntance();
