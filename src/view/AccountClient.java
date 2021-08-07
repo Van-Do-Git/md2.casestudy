@@ -76,9 +76,9 @@ public class AccountClient {
         String regexPass = "^[0-9]{8,12}$";
         boolean checkData;
         do {
-            System.out.println("input user(8-12 ký từ viết liền không dấu)");
+            System.out.println("input user(8-12 ký tự viết liền không dấu)");
             user = scanner.nextLine();
-            System.out.println("input pass(số 8 - 12 ký tự số viết liền)");
+            System.out.println("input pass(8-12 ký tự số viết liền)");
             pass = scanner.nextLine();
             checkData = validate.validate(user, regexUser) && validate.validate(pass, regexPass);
         } while (!checkData);

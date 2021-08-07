@@ -28,9 +28,10 @@ public class AlbumClient {
             System.out.println("9: to save Data");
             System.out.println("10: to entry SongClient");
             System.out.println("11: to showAll song of a Album");
+            System.out.println("12: to edit name song of a Album");
             System.out.println("0: to logout");
             chose = scanner.nextLine();
-            checkout = validate.validate(chose, regexChose) && chose.equals("11");
+            checkout = validate.validate(chose, regexChose) && chose.equals("0");
             switch (chose) {
                 case "1":
                     addAlbum(albumManager);
@@ -65,6 +66,10 @@ public class AlbumClient {
                     break;
                 case "11":
                     showAllSongOfAlbum(albumManager);
+                    break;
+                case "12":
+                    editNameSongOfAlbum(albumManager);
+                    break;
                 case "0":
                     break;
             }
@@ -75,7 +80,7 @@ public class AlbumClient {
         albumManager.showAllAlbum();
         Scanner scanner = new Scanner(System.in);
         String nameAlbum;
-        System.out.println("input name of Album to delete a Song");
+        System.out.println("input name of Album to show all Song");
         nameAlbum = scanner.nextLine();
         int indexAlbum = albumManager.searchByNameAlbum(nameAlbum);
         if (indexAlbum == -1) {
@@ -198,6 +203,43 @@ public class AlbumClient {
         }
     }
 
+    public static void editNameSongOfAlbum(AlbumManager albumManager) {
+        albumManager.showAllAlbum();
+        Scanner scanner = new Scanner(System.in);
+        String nameAlbum;
+        String nameSong;
+        int indexAlbum;
+        int indexSong;
+        System.out.println("input name of Album to edit name Song");
+        nameAlbum = scanner.nextLine();
+        indexAlbum = albumManager.searchByNameAlbum(nameAlbum);
+        if (indexAlbum == -1) {
+            System.out.println("Not found this Album");
+        } else {
+            albumManager.getAlbumList().get(indexAlbum).showAllSong();
+            System.out.println("input name of Song to edit");
+            nameSong = scanner.nextLine();
+            indexSong = albumManager.getAlbumList().get(indexAlbum).searchByNameSong(nameSong);
+            if (indexSong == -1) {
+                System.out.println("Not found this Song");
+            } else {
+                String newName = scanner.nextLine();
+                String regexNewName = "^\\b.*$";
+                boolean checkData;
+                do {
+                    System.out.println("Input new name, not emty and not duplicate old name");
+                    newName = scanner.nextLine();
+                    checkData = newName.equals(nameSong) || !validate.validate(regexNewName, newName);
+                    if (checkData) {
+                        System.out.println("try again");
+                    }
+                } while (checkData);
+                albumManager.getAlbumList().get(indexAlbum).getListSong().get(indexSong).setNameSong(newName);
+                System.out.println("edit name sucessful");
+            }
+        }
+    }
+
     public static void addSongOnAlbum(AlbumManager albumManager) {
         Scanner scanner = new Scanner(System.in);
         SongClient.showAllSong();
@@ -218,7 +260,7 @@ public class AlbumClient {
                 addSongOnAlbum(albumManager);
             } else {
                 System.out.println("add sucessful");
-                albumManager.getAlbumList().get(index).addSong(newSong);
+                albumManager.addSongs(newSong, index);
             }
         }
     }

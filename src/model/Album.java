@@ -28,17 +28,8 @@ public class Album implements Serializable {
         listSong = list;
     }
 
-    public boolean addSong(Song song) {
-        int checkNameSong = searchByNameSong(song.getNameSong());
-        if (checkNameSong != -1) {
-            try {
-                listSong.add(song);
-                return true;
-            } catch (Exception e) {
-                return false;
-            }
-        }
-        return false;
+    public void addSong(Song song) {
+        listSong.add(song);
     }
 
     public boolean editSong(int index, Song song) {
@@ -68,8 +59,9 @@ public class Album implements Serializable {
 
     public void showAllSong() {
         for (Song song : listSong) {
-            System.out.print(song+";\t");
+            System.out.print(song.toString()+";\t");
         }
+        System.out.println(" ");
     }
 
     @Override
